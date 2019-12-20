@@ -18,14 +18,14 @@ const Login = (props) => {
     console.log(login)
   };
 
-  const handelLogin = e => {
+  const handleLogin = e => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/api/login", login)
+      .post('http://localhost:5000/api/login', login)
       .then(res => {
         console.log(res);
-        localStorage.setItem("token", res.data.payload);
-        props.history.push("/protected");
+        localStorage.setItem('token', res.data.payload);
+        props.history.push('/protected');
       })
       .catch(err =>
         console.log(
@@ -36,7 +36,7 @@ const Login = (props) => {
   return (
     <>
       <h1>Welcome to the Bubble App!</h1>
-      <form onSubmit={useHandler}>
+      <form onSubmit={handleLogin}>
         <input type='text' name='username' value={login.username} onChange={useHandler} placeholder='username'/>
         <input type='password' name='password' value={login.password} onChange={useHandler} placeholder='password'/>
         <button>Login</button>
