@@ -1,45 +1,44 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 
-const Login = () => {
+const Login = (props) => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  const [user, setUser] = useState ('');
-  const [password, setPassword] = useState ('');
+  const [login, setLogin] = useState ({
+    username: '',
+    password: ''
+  });
 
   const useHandler = e => {
-    e.preventDefault();
-    setUser(e.target.value)
+    setLogin({
+      ...login,
+      [e.target.name]: e.target.value
+    });
+    console.log(login)
   };
 
-  const passwordHandler = e => {
+  const handelLogin = e => {
     e.preventDefault();
-    setPassword(e.target.value)
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    let credentials = {
-      username: user,
-      password: password
-    }
-
     axios
-    .post('http://localhost:5000/api/login', credentials)
-    .then(res => {localStorage.setItem('token', res.data.payload)
-  })
-  .catch(err => console.log('error', err.response))
-
-  setUser('');
-  setPassword('');
-  }
+      .post("http://localhost:5000/api/login", login)
+      .then(res => {
+        console.log(res);
+        localStorage.setItem("token", res.data.payload);
+        props.history.push("/protected");
+      })
+      .catch(err =>
+        console.log(
+          err.message
+        )
+      );
+  };
   return (
     <>
       <h1>Welcome to the Bubble App!</h1>
-      <form onSubmit={handleSubmit}>
-        <input type='text' value={user} onChange={useHandler} placeholder='username'/>
-        <input type='password' value={password} onChange={passwordHandler} placeholder='password'/>
+      <form onSubmit={useHandler}>
+        <input type='text' name='username' value={login.username} onChange={useHandler} placeholder='username'/>
+        <input type='password' name='password' value={login.password} onChange={useHandler} placeholder='password'/>
         <button>Login</button>
       </form>
     </>
